@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form method="post" action="{% url 'crear_categoria' %}">
+<form method="post" action="{% url 'inventario:crear_categoria' %}">
     {% csrf_token %}
     <div class="mb-3">
         <label for="nombre">Nombre de Categoría:</label>

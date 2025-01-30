@@ -19,31 +19,26 @@
 
 {% block content %}
 
-<h1>Nuevo Producto</h1>
-
-
-
-
-
-<form method="post" class="row g-3" action="{% url 'inventario:crear_producto' %}">
+<h1>Editar Producto</h1>
+<form method="post" class="row g-3" action="{% url 'inventario:editar_producto' producto.id %}">
     {% csrf_token %}
     <div class="col-md-6">
         <label for="codigo" class="form-label">Codigo</label>
-        <input type="text" name="codigo" id="codigo" class="form-control" placeholder="Ingresar..." required>
+        <input type="text" name="codigo" id="codigo" class="form-control" value="{{ producto.codigo }}" required>
         {% for error in form.nombre.errors %}
         <div class="text-danger">{{ error }}</div>
         {% endfor %}
     </div>
     <div class="col-md-6">
         <label for="nombre" class="form-label">Nombre</label>
-        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingresar...">
+        <input type="text" name="nombre" id="nombre" class="form-control" value="{{ producto.nombre }}">
         {% for error in form.nombre.errors %}
         <div class="text-danger">{{ error }}</div>
         {% endfor %}
     </div>
     <div class="col-md-6">
         <label for="stock" class="form-label">Stock</label>
-        <input type="number" name="stock" id="stock" class="form-control" placeholder="Ingresar..." required>
+        <input type="number" name="stock" id="stock" class="form-control" value="{{ producto.stock }}" required>
         {% for error in form.nombre.errors %}
         <div class="text-danger">{{ error }}</div>
         {% endfor %}
@@ -57,18 +52,16 @@
     </div>
     <div class="col-12">
         <label for="descripcion" class="form-label">Descripción</label>
-        <textarea name="descripcion" placeholder="Ingresar..." id="descripcion" class="form-control"></textarea>
+        <textarea name="descripcion" id="descripcion" class="form-control">{{ producto.descripcion }}</textarea>
         {% for error in form.descripcion.errors %}
         <div class="text-danger">{{ error }}</div>
-        {% endfor %}
+        {% endfor %}    
     </div>
     <div class="col-12">
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a href="{% url 'inventario:index' %}" class="btn btn-secondary">Cancelar</a>
-            
     </div>
 </form>
-
 
 {% endblock %}
 

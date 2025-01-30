@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+
+{% block title %}Repuestos Mersch{% endblock %}
+
+{% block nav %}
+
+{% endblock %}
+
+{% block container %}
+
+<div class="d-flex align-items-center justify-content-center vh-100 " style="background-image: url({% static 'images/repuestos_desparramados.png' %}); background-size: cover; background-position: center;">
+    <div class="text-center">
+        <!-- Imagen central -->
+        <img src="{% static 'images/Imagen_Respuestos_Mersch-removebg-preview.png' %}" alt="Logo" class="img-fluid mb-4" style="max-width: 700px;">
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'ventas:index' %}" class="btn btn-primary btn-lg">Ir a Ventas</a>
+            <a href="{% url 'inventario:index' %}" class="btn btn-secondary btn-lg">Ir a Inventario</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
