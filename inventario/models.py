@@ -11,9 +11,9 @@ class Categorias(models.Model):
 class Producto(models.Model):
     codigo = models.CharField(max_length=50)
     stock = models.IntegerField(default=0, blank=True)
-    nombre = models.CharField(max_length=50, blank=True, null=True)
+    marca = models.CharField(max_length=50, default="---", blank=False, null=False)
     categoria = models.ForeignKey(Categorias, on_delete=models.CASCADE)
     descripcion = models.TextField(blank=True, null=True)
     
     def __str__(self):
-        return f'({self.codigo})' + self.nombre
+        return f'({self.codigo})' + self.marca

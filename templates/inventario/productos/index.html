@@ -9,18 +9,18 @@
         <form method="GET" class="row g-3">
             <div class="col-md-3">
                 <label for="codigo" class="form-label">Código</label>
-                <input type="text" name="codigo" id="codigo" class="form-control" value="{{ codigo }}">
+                <input type="text" name="codigo" id="codigo" class="form-control" value="{{ codigo }}" autofocus>
             </div>
             <div class="col-md-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ nombre }}">
+                <label for="marca" class="form-label">Marca</label>
+                <input type="text" name="marca" id="marca" class="form-control" value="{{ marca }}">
             </div>
             <div class="col-md-3">
                 <label for="categoria" class="form-label">Categoría</label>
                 <select name="categoria" id="categoria" class="form-control">
                     <option value="">Todas</option>
                     {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}" {% if categoria_id|slugify == categoria.id|slugify %}selected{% endif %}>{{ categoria.nombre }}</option>
+                        <option value="{{ categoria.id }}" {% if categoria_id|slugify == categoria.id|slugify %}selected{% endif %}>{{ categoria.marca }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -35,9 +35,9 @@
     <thead>
         <tr>
             <th scope="col">Codigo</th>
-            <th scope="col">Nombre</th>
+            <th scope="col">Marca</th>
             <th scope="col">Stock</th>
-            <th scope="col">Descripción</th>
+            <th scope="col">Categoria</th>
             <th scope="col">Acciones</th>
         </tr>
     </thead> 
@@ -45,12 +45,13 @@
         {% for producto in productos %}
         <tr>
             <td>{{ producto.codigo }}</td>
-            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.marca }}</td>
             <td>{{ producto.stock }}</td>
-            <td>{{ producto.descripcion }}</td>
+            <td>{{ producto.categoria }}</td>
             <td>
-                <a href="{% url 'inventario:editar_producto' producto.id %}" class="btn btn-warning">Editar</a>
-                <a href="{% url 'inventario:eliminar_producto' producto.id %}" class="btn btn-danger">Eliminar</a>
+                {% comment %} <a href="{% url 'inventario:editar_producto' producto.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'inventario:eliminar_producto' producto.id %}" class="btn btn-danger">Eliminar</a> {% endcomment %}
+                <a href="{% url 'inventario:detalle_producto' producto.id %}" class="btn btn-primary">Detalle</a>
             </td>
         </tr>
         {% endfor %}

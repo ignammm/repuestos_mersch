@@ -12,13 +12,13 @@ def index(request):
     productos_list = Producto.objects.all()  
 
     codigo = request.GET.get('codigo', '')
-    nombre = request.GET.get('nombre', '')
+    marca = request.GET.get('marca', '')
     categoria_id = request.GET.get('categoria', '')
 
     if codigo:
         productos_list = productos_list.filter(codigo=codigo)
-    if nombre:
-        productos_list = productos_list.filter(nombre__icontains=nombre)
+    if marca:
+        productos_list = productos_list.filter(marca__icontains=marca)
     if categoria_id:
         productos_list = productos_list.filter(categoria_id=categoria_id)
 
@@ -31,7 +31,7 @@ def index(request):
         'productos': productos,
         'categorias': categorias,
         'codigo': codigo,
-        'nombre': nombre,
+        'marca': marca,
         'categoria_id': categoria_id
     })
 
@@ -47,8 +47,8 @@ def create_producto(request):
     return render(request, 'inventario/productos/create.html', {'form': form})
     
     
-def edit_producto(request, id_producto):
-    producto = get_object_or_404(Producto, id=id_producto)  
+def edit_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)  
 
     if request.method == 'POST':
         form = ProductoForm(request.POST, instance=producto)
@@ -67,13 +67,17 @@ def delete_producto(request, producto_id):
     messages.success(request, "Producto eliminado correctamente.")
     return redirect('inventario:index') 
 
+def detail_producto(request, producto_id,):
+    producto = get_object_or_404(Producto, id=producto_id)
+    return render(request, 'inventario/productos/detail.html', {'producto': producto})
+
 def create_categoria(request):
     if request.method == 'POST':
         form = CategoriasForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, ("Categoría creada correctamente!"))
-            return redirect('inventario:create_categorias')
+            return redirect('inventario:crear_categoria')
     else:
         form = CategoriasForm()
     return render(request, 'inventario/categorias/create.html', {'form': form})
