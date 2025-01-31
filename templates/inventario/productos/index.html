@@ -2,7 +2,27 @@
 
 {% block title %}Productos{% endblock %}
 
+{% block style %}
+  
+        .alert {
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .alert.fade {
+            opacity: 0;
+        }
+    
+{% endblock %}
+
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible show" role="alert" id="message-{{ forloop.counter }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="card">
     <div class="card-body">
@@ -49,9 +69,8 @@
             <td>{{ producto.stock }}</td>
             <td>{{ producto.categoria }}</td>
             <td>
-                {% comment %} <a href="{% url 'inventario:editar_producto' producto.id %}" class="btn btn-warning">Editar</a>
-                <a href="{% url 'inventario:eliminar_producto' producto.id %}" class="btn btn-danger">Eliminar</a> {% endcomment %}
                 <a href="{% url 'inventario:detalle_producto' producto.id %}" class="btn btn-primary">Detalle</a>
+                <a href="{% url 'ingresos:ingresar_producto' producto.id %}" class="btn btn-success">Ingresar</a>
             </td>
         </tr>
         {% endfor %}
@@ -78,5 +97,25 @@
 </nav>
 
 <a href="{% url 'inventario:crear_producto' %}" class="btn btn-primary">Cargar Producto</a>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alerts = document.querySelectorAll('.alert');
+        
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                alert.classList.add('fade');
+                setTimeout(function() {
+                    alert.remove();
+                }, 300); // Tiempo de animación
+            }, 3000); // 3 segundos para desaparecer
+        });
+    });
+</script>
+  
 
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Ingresar{% endblock %}
+
+{% block content %}
+
+<h2>{{ producto.categoria }} ({{ producto.codigo }})</h2>
+<form action="{% url 'ingresos:ingresar_producto' producto.id %}" method="post">
+    {% csrf_token %}
+    <div class="card mb-2">
+        <div class="carbody">
+            <div class="form-group">
+                <h5 class="m-2">Cantidad:</h5>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" required autofocus>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Cargar</button>
+    <a href="{% url 'inventario:index' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}

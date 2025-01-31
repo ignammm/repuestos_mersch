@@ -16,7 +16,7 @@
             <h5 class="card-subtitle mb-2 text-muted">Stock: {{ producto.stock }}</h5>
             <h5 class="card-subtitle mb-2 text-muted">Descripción: {{ producto.descripcion }}</h5>
         </div>
-        <!-- Contenedor derecho con botones alineados arriba -->
+  
         <div class="col-md-4 d-flex justify-content-end align-items-start">
             <a href="{% url 'inventario:editar_producto' producto.id %}" class="btn btn-warning me-2">Editar</a>
             <a href="{% url 'inventario:eliminar_producto' producto.id %}" class="btn btn-danger">Eliminar</a>
