@@ -9,14 +9,14 @@ from inventario.models import Producto, Categorias
 
 def index(request):
     
-    productos_list = Producto.objects.all()  
+    productos_list = Producto.objects.all().order_by('-id') 
 
     codigo = request.GET.get('codigo', '')
     marca = request.GET.get('marca', '')
     categoria_id = request.GET.get('categoria', '')
 
     if codigo:
-        productos_list = productos_list.filter(codigo=codigo)
+        productos_list = productos_list.filter(codigo__icontains=codigo)
     if marca:
         productos_list = productos_list.filter(marca__icontains=marca)
     if categoria_id:

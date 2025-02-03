@@ -1,6 +1,22 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+    <script src="{% static 'js/messages.js' %}"></script>
+
+{% endblock %}
+
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible show" role="alert" id="message-{{ forloop.counter }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
 <form method="post" action="{% url 'inventario:crear_categoria' %}">
     {% csrf_token %}

@@ -1,18 +1,14 @@
 {% extends 'layouts/base.html' %}
 
+{% load static %}
+
 {% block title %}Productos{% endblock %}
 
-{% block style %}
-  
-        .alert {
-            transition: opacity 0.3s ease;
-            opacity: 1;
-        }
+{% block head %}
 
-        .alert.fade {
-            opacity: 0;
-        }
-    
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+    <script src="{% static 'js/messages.js' %}"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -31,21 +27,21 @@
                 <label for="codigo" class="form-label">Código</label>
                 <input type="text" name="codigo" id="codigo" class="form-control" value="{{ codigo }}" autofocus>
             </div>
-            <div class="col-md-3">
+            {% comment %} <div class="col-md-3">
                 <label for="marca" class="form-label">Marca</label>
                 <input type="text" name="marca" id="marca" class="form-control" value="{{ marca }}">
-            </div>
-            <div class="col-md-3">
+            </div> {% endcomment %}
+            {% comment %} <div class="col-md-3">
                 <label for="categoria" class="form-label">Categoría</label>
                 <select name="categoria" id="categoria" class="form-control">
                     <option value="">Todas</option>
                     {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}" {% if categoria_id|slugify == categoria.id|slugify %}selected{% endif %}>{{ categoria.marca }}</option>
+                        <option value="{{ categoria.id }}" {% if categoria_id|slugify == categoria.id|slugify %}selected{% endif %}>{{ categoria.nombre }}</option>
                     {% endfor %}
                 </select>
-            </div>
+            </div> {% endcomment %}
             <div class="col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
             </div>
         </form>
     </div>
@@ -70,7 +66,7 @@
             <td>{{ producto.categoria }}</td>
             <td>
                 <a href="{% url 'inventario:detalle_producto' producto.id %}" class="btn btn-primary">Detalle</a>
-                <a href="{% url 'ingresos:ingresar_producto' producto.id %}" class="btn btn-success">Ingresar</a>
+                <a href="{% url 'ingresos:ingresar_producto' producto.id %}" class="btn btn-success">Reponer</a>
             </td>
         </tr>
         {% endfor %}
@@ -79,43 +75,29 @@
 
 <!-- Controles de paginación -->
 <nav>
-    <ul class="pagination">
-        {% if productos.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primera</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ productos.previous_page_number }}">Anterior</a></li>
-        {% endif %}
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <ul class="pagination mb-0">
+            {% if productos.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; Primera</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ productos.previous_page_number }}">Anterior</a></li>
+            {% endif %}
 
-        <li class="page-item disabled">
-            <a class="page-link">Página {{ productos.number }} de {{ productos.paginator.num_pages }}</a>
-        </li>
+            <li class="page-item disabled">
+                <a class="page-link">Página {{ productos.number }} de {{ productos.paginator.num_pages }}</a>
+            </li>
 
-        {% if productos.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ productos.next_page_number }}">Siguiente</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ productos.paginator.num_pages }}">Última &raquo;</a></li>
-        {% endif %}
-    </ul>
+            {% if productos.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ productos.next_page_number }}">Siguiente</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ productos.paginator.num_pages }}">Última &raquo;</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="mx-3">
+            <a href="{% url 'inventario:crear_producto' %}" class="btn btn-success">Nuevo Producto</a>
+        </div>
+    </div>
 </nav>
 
-<a href="{% url 'inventario:crear_producto' %}" class="btn btn-primary">Cargar Producto</a>
 
-{% endblock %}
-
-{% block scripts %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var alerts = document.querySelectorAll('.alert');
-        
-        alerts.forEach(function(alert) {
-            setTimeout(function() {
-                alert.classList.add('fade');
-                setTimeout(function() {
-                    alert.remove();
-                }, 300); // Tiempo de animación
-            }, 3000); // 3 segundos para desaparecer
-        });
-    });
-</script>
-  
 
 {% endblock %}

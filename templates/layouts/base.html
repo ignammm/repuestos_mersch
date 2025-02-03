@@ -14,8 +14,8 @@
         {% block header %}{% endblock %}
     </header>
         {% block nav %}
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid bg-dark" >
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid bg-dark">
                 <div class="px-2">
                     <img src="{% static 'images/Imagen_Respuestos_Mersch-removebg-preview.png' %}" alt="Logo" height="50" width="100">
                 </div>
@@ -25,19 +25,38 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active text-light" aria-current="page" href="{% url 'ventas:index' %}">Ventas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light" href="{% url 'inventario:index' %}">Inventario</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link text-light" href="{% url 'inventario:crear_categoria' %} ">Categorias</a>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="inventarioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Productos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'inventario:index' %}">Ver Stock</a></li>
+                                <li><a class="dropdown-item" href="#">Buscar Producto</a></li>
+                                <li><a class="dropdown-item" href="{% url 'inventario:crear_producto' %}">Nuevo Producto</a></li>
+                                <li><a class="dropdown-item" href="{% url 'inventario:crear_categoria' %}">Nueva Categoria</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="ventasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Inventario
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Dar Ingreso</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="ventasDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Ventas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'ventas:index' %}">Realizar Venta</a></li>
+                                <li><a class="dropdown-item" href="#">Informes</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
-                </div>
-            </nav>
+            </div>
+        </nav>        
         {% endblock %}
     <section>
         {% block container %}

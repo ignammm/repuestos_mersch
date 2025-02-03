@@ -1,8 +1,13 @@
 from django.forms import ModelForm
-from models import Venta
+from django import forms
+from .models import Venta
+from inventario.models import Producto
+
 
 
 class VentaForm(ModelForm):
     class Meta:
         model = Venta
-        fields= ["monto", "fecha", "descripcion", "producto"]
+        fields= "__all__"
+        
+    
