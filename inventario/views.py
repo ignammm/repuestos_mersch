@@ -71,13 +71,20 @@ def detail_producto(request, producto_id,):
     producto = get_object_or_404(Producto, id=producto_id)
     return render(request, 'inventario/productos/detail.html', {'producto': producto})
 
-def create_categoria(request):
+def create_categoria(request, return_id):
+    dir_template = ''
     if request.method == 'POST':
         form = CategoriasForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, ("Categoría creada correctamente!"))
-            return redirect('inventario:crear_categoria')
     else:
         form = CategoriasForm()
-    return render(request, 'inventario/categorias/create.html', {'form': form})
+    
+    if return_id == 1:
+        dir_template = 'inventario/categorias/create.html'
+    elif return_id == 2:
+        dir_template = 'inventario/productos/create.html'
+        
+    
+    return render(request, dir_template, {'form': form})

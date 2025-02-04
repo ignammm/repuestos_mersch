@@ -1,0 +1,10 @@
+/* messages.css */
+.alert {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 1;
+}
+
+.alert.auto-hide {
+    opacity: 0;
+    pointer-events: none; /* Evita que se pueda interactuar con el mensaje */
+}

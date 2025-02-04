@@ -4,24 +4,31 @@
 
 {% block title %}Repuestos Mersch{% endblock %}
 
-{% block nav %}
+{% block content %}
 
-{% endblock %}
+<div class="d-flex align-items-center justify-content-center w-100 position-relative" 
+     style="background-image: url({% static 'images/repuestos_desparramados.png' %}); 
+            background-size: cover; 
+            background-position: center; 
+            min-height: 90vh;">
+    
+    <!-- Capa oscura -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" 
+         style="background-color: rgba(0, 0, 0, 0.5);"></div>
 
-{% block container %}
-
-<div class="d-flex align-items-center justify-content-center vh-100 " style="background-image: url({% static 'images/repuestos_desparramados.png' %}); background-size: cover; background-position: center;">
-    <div class="text-center">
+    <div class="text-center position-relative z-1">
         <!-- Imagen central -->
-        <img src="{% static 'images/Imagen_Respuestos_Mersch-removebg-preview.png' %}" alt="Logo" class="img-fluid mb-4" style="max-width: 700px;">
+        <img src="{% static 'images/Imagen_Respuestos_Mersch-removebg-preview.png' %}" 
+             alt="Logo" class="img-fluid mb-4" style="max-width: 700px;">
 
         <!-- Botones -->
         <div class="d-flex justify-content-center gap-3">
-            <a href="{% url 'ventas:index' %}" class="btn btn-primary btn-lg">Ir a Ventas</a>
-            <a href="{% url 'inventario:index' %}" class="btn btn-secondary btn-lg">Ir a Inventario</a>
+            <a href="{% url 'inventario:index' %}" class="btn btn-primary btn-lg">Ver Stock</a>
+            <a href="{% url 'ventas:index' %}" class="btn btn-secondary btn-lg">Realizar Venta</a>
         </div>
     </div>
 </div>
+
 
 
 {% endblock %}

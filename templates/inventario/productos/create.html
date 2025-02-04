@@ -79,17 +79,27 @@
     </div>
 </form>
 
+<div class="card mt-3">
+    <div class="card-head">
+        <h5 class="m-2">Nueva categoria</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" action="{% url 'inventario:crear_categoria' 2 %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="nombre" class="mb-1">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" autofocus required>
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Categoría</button>
+        </form>
+    </div>
+
+</div>
 
 {% endblock %}
 
-{% block footer %}
-
-
-
-{% endblock %}
 
 {% block scripts %}
-
 
 <script>
     $(document).ready(function() {

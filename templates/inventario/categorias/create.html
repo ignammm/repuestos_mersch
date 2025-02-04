@@ -18,7 +18,7 @@
     {% endfor %}
 {% endif %}
 
-<form method="post" action="{% url 'inventario:crear_categoria' %}">
+<form method="post" action="{% url 'inventario:crear_categoria' 1 %}">
     {% csrf_token %}
     <div class="mb-3">
         <label for="nombre">Nombre de Categoría:</label>

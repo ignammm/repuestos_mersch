@@ -1,5 +1,6 @@
 
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -8,14 +9,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+SECRET_KEY_PATH = Path("C:/Users/ignac/Documents/django/secret_key_repuestos_mersch.txt")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2ydtimsf0zh%-yb^tsblh(by(sy8)1zqab1$npdj18o_&(vdo8'
+if SECRET_KEY_PATH.exists():
+    SECRET_KEY = SECRET_KEY_PATH.read_text().strip()
+else:
+    raise FileNotFoundError(f"El archivo de clave secreta no se encontró en {SECRET_KEY_PATH}")
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",  # Acceso local
+    "127.0.0.1",  # Acceso en el mismo equipo
+    "192.168.7.86",  # Dirección IP específica de tu PC en la red
+    "192.168.7.0/24",  # Toda la subred 192.168.7.x
+    "190.57.244.92",    # IP Publica
+]
 
 
 # Application definition
@@ -34,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -41,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'repuestos_mersch.urls'
 
@@ -113,6 +127,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
