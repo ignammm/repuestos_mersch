@@ -9,26 +9,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-SECRET_KEY_PATH = Path("C:/Users/ignac/Documents/django/secret_key_repuestos_mersch.txt")
-
-if SECRET_KEY_PATH.exists():
-    SECRET_KEY = SECRET_KEY_PATH.read_text().strip()
-else:
-    raise FileNotFoundError(f"El archivo de clave secreta no se encontró en {SECRET_KEY_PATH}")
+SECRET_KEY = "O1ZMav7K1l9DUecGVGEvINqdWOu4jHRAkG7YRytpLIRCFBDpCBFw6fDCJUHUORdZBoEsH9VueJdFnNzwWNjiyw"
 
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    "localhost",  # Acceso local
-    "127.0.0.1",  # Acceso en el mismo equipo
-    "192.168.7.86",  # Dirección IP específica de tu PC en la red
-    "192.168.7.0/24",  # Toda la subred 192.168.7.x
-    "190.57.244.92",    # IP Publica
-]
+ALLOWED_HOSTS = []
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 
@@ -133,12 +125,13 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
