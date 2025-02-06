@@ -60,11 +60,14 @@
     </div>
     <div class="col-md-6">
         <label for="categoria" class="form-label">Categoría</label>
-        {{ form.categoria }}
-        {% for error in form.categoria.errors %}
-        <div class="text-danger">{{ error }}</div>
-        {% endfor %}
+        <select name="categoria" id="categoria" class="form-control select2">
+            <option value="">Selecciona una categoría</option>
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select>
     </div>
+    
     <div class="col-12">
         <label for="descripcion" class="form-label">Descripción</label>
         <textarea name="descripcion" placeholder="Ingresar..." id="descripcion" class="form-control"></textarea>
@@ -84,8 +87,9 @@
         <h5 class="m-2">Nueva categoria</h5>
     </div>
     <div class="card-body">
-        <form method="post" action="{% url 'inventario:crear_categoria' 2 %}">
+        <form method="post" action="{% url 'inventario:crear_categoria' %}">
             {% csrf_token %}
+            <input type="number" name="return_id" hidden value="2">
             <div class="mb-3">
                 <label for="nombre" class="mb-1">Nombre:</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" autofocus required>
@@ -107,8 +111,31 @@
             placeholder: "Selecciona una categoría",
             allowClear: true
         });
+
+        $("form[action*='crear_categoria']").submit(function(event) {
+            event.preventDefault();  // Evitar recarga
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"),
+                data: $(this).serialize(),
+                success: function(response) {
+                    alert("Categoría creada correctamente!");
+                    
+                    // Volver a cargar la lista de categorías
+                    $.get("{% url 'inventario:lista_categorias' %}", function(data) {
+                        let select = $("#categoria");
+                        select.empty().append('<option value="">Selecciona una categoría</option>');
+                        data.categorias.forEach(categoria => {
+                            select.append(`<option value="${categoria.id}">${categoria.nombre}</option>`);
+                        });
+                        select.trigger('change'); // Refrescar select2
+                    });
+                }
+            });
+        });
     });
 </script>
+
 
 {% endblock %}
 

@@ -18,8 +18,9 @@
     {% endfor %}
 {% endif %}
 
-<form method="post" action="{% url 'inventario:crear_categoria' 1 %}">
+<form method="post" action="{% url 'inventario:crear_categoria'%}">
     {% csrf_token %}
+    <input type="number" name="return_id" value="1" hidden>
     <div class="mb-3">
         <label for="nombre">Nombre de Categoría:</label>
         <input type="text" class="form-control" id="nombre" name="nombre" autofocus required>
