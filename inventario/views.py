@@ -95,10 +95,9 @@ def create_categoria(request):
             return redirect('inventario:crear_categoria')
         elif return_id == 2:
             return redirect('inventario:crear_producto')
-        else:
-            return redirect('inventario:crear_categoria')  # Evita el bucle
+        
 
-    return render(request, 'inventario/crear_categoria.html', {})
+    return render(request, 'inventario/categorias/create.html', {})
 
 
 
