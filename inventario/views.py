@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator
 
 from inventario.forms import CategoriasForm, ProductoForm
@@ -40,11 +40,18 @@ def create_producto(request):
         form = ProductoForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, ("Producto creado correctamente!"))
+            messages.success(request, "Producto creado correctamente!")
             return redirect('inventario:crear_producto')  
     else:
         form = ProductoForm()
-    return render(request, 'inventario/productos/create.html', {'form': form})
+
+    categorias = Categorias.objects.all()  # Obtener las categorías disponibles
+
+    return render(request, 'inventario/productos/create.html', {
+        'form': form,
+        'categorias': categorias
+    })
+
     
     
 def edit_producto(request, producto_id):
@@ -71,20 +78,31 @@ def detail_producto(request, producto_id,):
     producto = get_object_or_404(Producto, id=producto_id)
     return render(request, 'inventario/productos/detail.html', {'producto': producto})
 
-def create_categoria(request, return_id):
-    dir_template = ''
-    if request.method == 'POST':
-        form = CategoriasForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, ("Categoría creada correctamente!"))
-    else:
-        form = CategoriasForm()
-    
-    if return_id == 1:
-        dir_template = 'inventario/categorias/create.html'
-    elif return_id == 2:
-        dir_template = 'inventario/productos/create.html'
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import CategoriasForm
+
+def create_categoria(request):
+    return_id = int(request.POST.get('return_id', 0))
+    form = CategoriasForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, "Categoría creada correctamente!")
         
-    
-    return render(request, dir_template, {'form': form})
+        # Definir la URL a redirigir solo después de crear una categoría
+        if return_id == 1:
+            return redirect('inventario:crear_categoria')
+        elif return_id == 2:
+            return redirect('inventario:crear_producto')
+        else:
+            return redirect('inventario:crear_categoria')  # Evita el bucle
+
+    return render(request, 'inventario/crear_categoria.html', {})
+
+
+
+
+def lista_categorias(request):
+    categorias = Categorias.objects.values("id", "nombre")
+    return JsonResponse({"categorias": list(categorias)})
