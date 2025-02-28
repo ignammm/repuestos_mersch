@@ -1,0 +1,62 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Consultar Stock{% endblock %}
+
+{% block content %}
+<h1>Consultar Stock</h1>
+
+<!-- Formulario de búsqueda -->
+<form method="get">
+    <input type="text" name="codigo_barras" placeholder="Código de barras" value="{{ request.GET.codigo_barras }}">
+    <input type="text" name="nombre_articulo" placeholder="Artículo" value="{{ request.GET.nombre_articulo }}">
+    <input type="number" name="stock" placeholder="Stock mínimo" value="{{ request.GET.stock }}">
+    <button class="btn btn-primary" type="submit">Filtrar</button>
+    <a class="btn btn-secondary" href="{% url 'consultar_articulo' %}">Limpiar filtros</a>
+</form>
+
+<!-- Tabla de stock -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código de Barras</th>
+            <th>Artículo</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for articulo in articulos %}
+        <tr>
+            <td>{{ articulo.codigo_barras }}</td>
+            <td>{{ articulo.articulo }}</td>
+            <td>{{ articulo.stock }}</td>
+            <td>
+                <a class="btn btn-secondary" href="{% url 'detalle_articulo' articulo.codigo_barras %}">Ver detalle</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No se encontraron artículos</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Paginación -->
+<div>
+    {% if articulos.has_previous %}
+        <a href="?page=1{% if request.GET.codigo_barras %}&codigo_barras={{ request.GET.codigo_barras }}{% endif %}
+                       {% if request.GET.nombre_articulo %}&nombre_articulo={{ request.GET.nombre_articulo }}{% endif %}
+                       {% if request.GET.stock %}&stock={{ request.GET.stock }}{% endif %}">Primera</a>
+        <a href="?page={{ articulos.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    Página {{ articulos.number }} de {{ articulos.paginator.num_pages }}
+
+    {% if articulos.has_next %}
+        <a href="?page={{ articulos.next_page_number }}">Siguiente</a>
+        <a href="?page={{ articulos.paginator.num_pages }}">Última</a>
+    {% endif %}
+</div>
+
+{% endblock %}

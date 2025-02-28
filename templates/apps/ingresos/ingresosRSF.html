@@ -1,0 +1,105 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Ingreso RSF{% endblock %}
+
+{% block content %}
+<h1>Ingresos - RSF</h1>
+
+<input type="text" id="codigo_barras" placeholder="Escanear código de barras..." autofocus required>
+
+<input type="number" name="cantidad" id="cantidad" value="1" min="1" required>
+
+<ul id="lista-articulos"></ul>
+
+<button onclick="enviarLista()">Enviar lista</button>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    let listaArticulos = [];
+
+    document.getElementById("codigo_barras").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            let codigo = this.value.trim();
+            let cantidad = parseInt(document.getElementById("cantidad").value, 10) || 1;
+            this.value = "";  // Limpiar el input de código
+            document.getElementById("cantidad").value = 1;  // Reiniciar cantidad a 1
+            if (codigo) {
+                buscarArticulo(codigo, cantidad);
+            }
+        }
+    });
+    
+    function buscarArticulo(codigo, cantidad) {
+        fetch(`/ingresos/buscar_articulo/${codigo}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Artículo no encontrado");
+                } else {
+                    agregarOActualizarArticulo(data, cantidad);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+    
+    function agregarOActualizarArticulo(data, cantidad) {
+        let articuloExistente = listaArticulos.find(item => item.CodigoRSF === data.CodigoRSF);
+    
+        if (articuloExistente) {
+            // Incrementar cantidad si el artículo ya existe
+            articuloExistente.cantidad += cantidad;
+        } else {
+            // Agregar nuevo artículo con cantidad
+            data.cantidad = cantidad;
+            listaArticulos.push(data);
+        }
+        actualizarLista();
+    }
+    
+    function actualizarLista() {
+        let lista = document.getElementById("lista-articulos");
+        lista.innerHTML = "";
+        listaArticulos.forEach((art, index) => {
+            let li = document.createElement("li");
+            li.textContent = `${art.Articulo} - ${art.MarcaOriginal} - ${art.TipoTxt} - Cantidad: ${art.cantidad}`;
+    
+            let btnEliminar = document.createElement("button");
+            btnEliminar.textContent = "X";
+            btnEliminar.className = "btn btn-danger btn-sm ms-2";
+            btnEliminar.onclick = () => eliminarArticulo(index);
+    
+            li.appendChild(btnEliminar);
+            lista.appendChild(li);
+        });
+    }
+    
+    function eliminarArticulo(index) {
+        listaArticulos.splice(index, 1);
+        actualizarLista();
+    }
+    
+    function enviarLista() {
+        if (listaArticulos.length === 0) {
+            alert("La lista está vacía. No se puede enviar.");
+            return;
+        }
+        fetch("/ingresos/guardar_ingreso/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ articulos: listaArticulos })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Ingreso guardado con éxito");
+            listaArticulos = [];
+            actualizarLista();
+        })
+        .catch(error => console.error("Error:", error));
+    }
+    
+</script>
+
+{% endblock %}
