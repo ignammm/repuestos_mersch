@@ -87,13 +87,17 @@ WSGI_APPLICATION = 'repuestos_mersch_v2.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "repuestos_mersch_v2",
-        "USER": "postgres",
-        "PASSWORD": "Madmax679",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": "repuestos_mersch_m8f5",  # Nombre de la base de datos en Render
+        "USER": "repuestos_mersch_m8f5_user",  # Usuario en Render
+        "PASSWORD": os.getenv('PASSWORD_DB'),  # Contraseña de Render
+        "HOST": os.getenv('HOST_DB'),  # Host de Render
+        "PORT": "5432",  # Puerto por defecto
+        "OPTIONS": {
+            "sslmode": "require",  # Render requiere SSL para conexiones externas
+        },
     }
 }
+
 
 
 # Password validation
