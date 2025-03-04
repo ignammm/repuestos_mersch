@@ -1,1 +1,19 @@
+# Evita archivos de base de datos local
+db.sqlite3
+*.pyc
+__pycache__/
+*.log
+
+# Archivos de configuración y credenciales
 .env
+*.secret
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de dependencias y compilaciones
+venv/
+.env/
+*.sqlite3
+/staticfiles/
