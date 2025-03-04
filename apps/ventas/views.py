@@ -6,6 +6,10 @@ from django.core.paginator import Paginator
 from apps.articulos.models import ArticuloRSF
 from apps.stock.models import ArticuloRSFStock
 from apps.ventas.models import Venta
+from django.db.models import Sum
+from django.shortcuts import render
+from django.utils import timezone
+from datetime import datetime
 
 def index(request):
     ventas_list = Venta.objects.all().order_by('-fecha')
@@ -136,11 +140,15 @@ def finalizar_venta(request):
                 articulo = ArticuloRSF.objects.get(CodigoBarra=codigo)
                 articulo_stock = ArticuloRSFStock.objects.get(codigo_barras=codigo)
                 
+                
+            precio_iva = float(str(articulo.PrecioNeto).replace(',', '.')) + float(str(articulo.PrecioNeto).replace(',', '.'))*0.21
+            precio_bruto = precio_iva + precio_iva*0.40
+        
             # Guardar la venta
             Venta.objects.create(
                 articulo=articulo,
                 cantidad=int(item['cantidad']),
-                monto_total=int(item['cantidad']) * float(articulo.PrecioLista.replace(',','.')),
+                monto_total=int(item['cantidad']) * precio_bruto,
             )
 
             # Descontar del stock
@@ -154,3 +162,32 @@ def finalizar_venta(request):
         return JsonResponse({"error": "Un artículo del carrito no existe"}, status=400)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
+
+
+def informe_ventas(request):
+    total_ventas = 0  # Inicializa la variable para evitar errores en la plantilla
+
+    fecha_inicio = request.GET.get('fecha_inicio')
+    fecha_fin = request.GET.get('fecha_fin')
+
+    if fecha_inicio and fecha_fin:
+        try:
+            # Convertir string a datetime
+            fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+            fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+
+            # Hacer las fechas "timezone-aware" para evitar el warning
+            fecha_inicio = timezone.make_aware(fecha_inicio)
+            fecha_fin = timezone.make_aware(fecha_fin)
+
+            # Obtener la suma total del monto_total de las ventas en el rango de fechas
+            total_ventas = Venta.objects.filter(fecha__range=[fecha_inicio, fecha_fin]).aggregate(Sum('monto_total'))['monto_total__sum']
+            
+            # Si no hay ventas, evitar que devuelva None y en su lugar devolver 0
+            total_ventas = total_ventas if total_ventas is not None else 0
+
+        except ValueError:
+            total_ventas = 0  # En caso de error en la conversión
+
+    return render(request, 'apps/ventas/informe_ventas.html', {'total_ventas': total_ventas})

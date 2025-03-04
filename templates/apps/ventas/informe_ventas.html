@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Informe-Ventas{% endblock %}
+
+{% block content %}
+
+<body>
+    <h2>Informe de Ventas</h2>
+    
+    <form method="GET" action="{% url 'ventas:informe_ventas' %}" onsubmit="return validarFechas();">
+        <label for="fecha_inicio">Fecha Inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+
+        <label for="fecha_fin">Fecha Fin:</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" required>
+
+        <button type="submit">Generar Informe</button>
+    </form>
+
+<hr>
+
+    <h3>Resultados:</h3>
+    {% if total_ventas %}
+        <h5>Ventas totales: ${{total_ventas}}</h5>
+    {% else %}
+        <p>No hay ventas en el rango de fechas seleccionado.</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    function validarFechas() {
+        var inicio = document.getElementById("fecha_inicio").value;
+        var fin = document.getElementById("fecha_fin").value;
+
+        if (inicio > fin) {
+            alert("La fecha de inicio no puede ser mayor que la fecha de fin.");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+{% endblock %}
