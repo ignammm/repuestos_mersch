@@ -30,9 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "repuestos-mersch.onrender.com",
-    "127.0.0.1",
-    "localhost"
+    "*",
 ]
 
 
