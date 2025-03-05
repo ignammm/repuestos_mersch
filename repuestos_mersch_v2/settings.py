@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import dj_database_url
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -89,17 +90,7 @@ WSGI_APPLICATION = 'repuestos_mersch_v2.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "repuestos_mersch_m8f5",  # Nombre de la base de datos en Render
-        "USER": "repuestos_mersch_m8f5_user",  # Usuario en Render
-        "PASSWORD": os.getenv('PASSWORD_DB'),  # Contraseña de Render
-        "HOST": os.getenv('HOST_DB'),  # Host de Render
-        "PORT": "5432",  # Puerto por defecto
-        "OPTIONS": {
-            "sslmode": "require",  # Render requiere SSL para conexiones externas
-        },
-    }
+     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
