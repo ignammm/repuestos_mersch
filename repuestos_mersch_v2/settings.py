@@ -90,12 +90,13 @@ WSGI_APPLICATION = 'repuestos_mersch_v2.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+    'default': dj_database_url.parse(
+        "postgresql://repuestos_mersch_m8f5_user:YUjX51aphlSW4aETAuemuS2Ve7G7dbXx@dpg-cv3ncqtumphs73ekgfgg-a/repuestos_mersch_m8f5",
         conn_max_age=600,
-        ssl_require=True  # Render requiere SSL en PostgreSQL
+        ssl_require=True
     )
 }
+
 
 
 # Password validation
