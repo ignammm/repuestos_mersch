@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'repuestos_mersch_v2.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(
-        "postgresql://repuestos_mersch_m8f5_user:YUjX51aphlSW4aETAuemuS2Ve7G7dbXx@dpg-cv3ncqtumphs73ekgfgg-a/repuestos_mersch_m8f5",
+        'postgresql://repuestos_mersch_m8f5_user:YUjX51aphlSW4aETAuemuS2Ve7G7dbXx@dpg-cv3ncqtumphs73ekgfgg-a.oregon-postgres.render.com/repuestos_mersch_m8f5',
         conn_max_age=600,
         ssl_require=True
     )
