@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['repuestos-mersch.onrender.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 
@@ -89,13 +89,15 @@ WSGI_APPLICATION = 'repuestos_mersch_v2.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://repuestos_mersch_m8f5_user:YUjX51aphlSW4aETAuemuS2Ve7G7dbXx@dpg-cv3ncqtumphs73ekgfgg-a.oregon-postgres.render.com/repuestos_mersch_m8f5',
-        conn_max_age=600,
-        ssl_require=True
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "repuestos_mersch_v2",
+        "USER": "postgres",
+        "PASSWORD": "Madmax679",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
 }
-
 
 
 # Password validation
